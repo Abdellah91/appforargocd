@@ -1,0 +1,10 @@
+---
+namespace: staging
+replicas:
+  - name: nginx-deployment
+    count: 1
+images:
+  - name: nginx
+    newTag: 1.14.2
+resources:
+  - ../../../base
