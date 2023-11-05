@@ -11,8 +11,8 @@ data:
     spec:
       version: v1.0
       init:
-        command: [sh, -c, 'echo "Initializing..."']
+        command: [sh, -c, 'echo ""']
       generate:
-        command: [sh, -c, 'echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"mycm\", \"namespace\": \"staging\"}}"']
+        command: [sh, -c, 'echo "{\"kind\": \"Namespace\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"myns\"}}"']
       discover:
-        fileName: "./envs/**/**/kustomization.yaml"
+        fileName: "./README.md"

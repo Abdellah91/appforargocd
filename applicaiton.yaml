@@ -6,8 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    path: envs/staging/my-app
+    path: ./test/
     plugin:
+      name: my-plugin-v1.0
       env:
         - name: FOO
           value: toto

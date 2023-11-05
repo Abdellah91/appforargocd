@@ -1,0 +1,276 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2023-11-05T20:08:42Z"
+  generateName: argocd-repo-server-7f754d46c7-
+  labels:
+    app.kubernetes.io/component: repo-server
+    app.kubernetes.io/instance: argocd
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: argocd-repo-server
+    app.kubernetes.io/part-of: argocd
+    app.kubernetes.io/version: v2.2.5
+    helm.sh/chart: argo-cd-3.35.4
+    pod-template-hash: 7f754d46c7
+  name: argocd-repo-server-7f754d46c7-fb9nv
+  namespace: argocd
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: argocd-repo-server-7f754d46c7
+    uid: 4c8210ff-9201-4e3b-adff-9194086be5fd
+  resourceVersion: "70569"
+  uid: 1efe0b31-aafe-4c0d-8317-69649bdca319
+spec:
+  containers:
+  - command:
+    - /var/run/argocd/argocd-cmp-server
+    image: busybox
+    imagePullPolicy: Always
+    name: my-plugin
+    resources: {}
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 999
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/argocd
+      name: var-files
+    - mountPath: /home/argocd/cmp-server/plugins
+      name: plugins
+    - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+      name: my-plugin-config
+      subPath: plugin.yaml
+    - mountPath: /tmp
+      name: my-plugin-tmp
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-ssxdj
+      readOnly: true
+  - args:
+    - argocd-repo-server
+    - --redis
+    - argocd-redis:6379
+    - --logformat
+    - text
+    - --loglevel
+    - info
+    command:
+    - entrypoint.sh
+    env:
+    - name: HELM_CACHE_HOME
+      value: /helm-working-dir
+    - name: HELM_CONFIG_HOME
+      value: /helm-working-dir
+    - name: HELM_DATA_HOME
+      value: /helm-working-dir
+    image: quay.io/argoproj/argocd:v2.2.5
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      tcpSocket:
+        port: 8081
+      timeoutSeconds: 1
+    name: repo-server
+    ports:
+    - containerPort: 8081
+      name: repo-server
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      tcpSocket:
+        port: 8081
+      timeoutSeconds: 1
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /app/config/gpg/source
+      name: gpg-keys
+    - mountPath: /app/config/gpg/keys
+      name: gpg-keyring
+    - mountPath: /app/config/ssh
+      name: ssh-known-hosts
+    - mountPath: /app/config/tls
+      name: tls-certs
+    - mountPath: /app/config/reposerver/tls
+      name: argocd-repo-server-tls
+    - mountPath: /tmp
+      name: tmp-dir
+    - mountPath: /helm-working-dir
+      name: helm-working-dir
+    - mountPath: /home/argocd/cmp-server/plugins
+      name: plugins
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-ssxdj
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  initContainers:
+  - command:
+    - cp
+    - -n
+    - /usr/local/bin/argocd
+    - /var/run/argocd/argocd-cmp-server
+    image: quay.io/argoproj/argocd:v2.2.5
+    imagePullPolicy: IfNotPresent
+    name: copyutil
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/argocd
+      name: var-files
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-ssxdj
+      readOnly: true
+  nodeName: kind-worker
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: argocd-repo-server
+  serviceAccountName: argocd-repo-server
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - configMap:
+      defaultMode: 420
+      name: my-plugin-config
+    name: my-plugin-config
+  - emptyDir: {}
+    name: my-plugin-tmp
+  - emptyDir: {}
+    name: cmp-tmp
+  - configMap:
+      defaultMode: 420
+      name: argocd-gpg-keys-cm
+    name: gpg-keys
+  - emptyDir: {}
+    name: gpg-keyring
+  - configMap:
+      defaultMode: 420
+      name: argocd-ssh-known-hosts-cm
+    name: ssh-known-hosts
+  - configMap:
+      defaultMode: 420
+      name: argocd-tls-certs-cm
+    name: tls-certs
+  - emptyDir: {}
+    name: helm-working-dir
+  - name: argocd-repo-server-tls
+    secret:
+      defaultMode: 420
+      items:
+      - key: tls.crt
+        path: tls.crt
+      - key: tls.key
+        path: tls.key
+      - key: ca.crt
+        path: ca.crt
+      optional: true
+      secretName: argocd-repo-server-tls
+  - emptyDir: {}
+    name: tmp-dir
+  - emptyDir: {}
+    name: var-files
+  - emptyDir: {}
+    name: plugins
+  - name: kube-api-access-ssxdj
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-11-05T20:08:44Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-11-05T20:09:03Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-11-05T20:09:03Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-11-05T20:08:42Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://6ddc1be41bec454bf4a7b1daa4471effa93107847ce99e8139dbbf488e8a3e06
+    image: docker.io/library/busybox:latest
+    imageID: docker.io/library/busybox@sha256:3fbc632167424a6d997e74f52b878d7cc478225cffac6bc977eedfe51c7f4e79
+    lastState: {}
+    name: my-plugin
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-11-05T20:08:45Z"
+  - containerID: containerd://f8a2289963b2f241514329b6d8e91b47d9ce5b69aacc5e0359944ff3c5971925
+    image: quay.io/argoproj/argocd:v2.2.5
+    imageID: quay.io/argoproj/argocd@sha256:bac1aeee8e78e64d81a633b9f64148274abfa003165544354e2ebf1335b6ee73
+    lastState: {}
+    name: repo-server
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-11-05T20:08:46Z"
+  hostIP: 172.18.0.3
+  initContainerStatuses:
+  - containerID: containerd://fb2473c96d00e9383ce63227b979214d92d46f3c16d3771e8990807a89b6750b
+    image: quay.io/argoproj/argocd:v2.2.5
+    imageID: quay.io/argoproj/argocd@sha256:bac1aeee8e78e64d81a633b9f64148274abfa003165544354e2ebf1335b6ee73
+    lastState: {}
+    name: copyutil
+    ready: true
+    restartCount: 0
+    state:
+      terminated:
+        containerID: containerd://fb2473c96d00e9383ce63227b979214d92d46f3c16d3771e8990807a89b6750b
+        exitCode: 0
+        finishedAt: "2023-11-05T20:08:43Z"
+        reason: Completed
+        startedAt: "2023-11-05T20:08:43Z"
+  phase: Running
+  podIP: 10.244.1.19
+  podIPs:
+  - ip: 10.244.1.19
+  qosClass: BestEffort
+  startTime: "2023-11-05T20:08:42Z"
