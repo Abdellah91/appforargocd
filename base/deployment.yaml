@@ -18,8 +18,5 @@ spec:
       containers:
       - name: nginx
         image: nginx
-        env:
-          - name: FOO
-            value: "$ARGOCD_ENV_FOO"
         ports:
         - containerPort: 80
