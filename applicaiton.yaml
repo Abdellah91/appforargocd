@@ -6,9 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Abdellah91/appforargocd.git
+    path: envs/staging/my-app
+    plugin:
+      env:
+        - name: FOO
+          value: toto
+    repoURL: 'https://github.com/Abdellah91/appforargocd.git'
     targetRevision: HEAD
-    path: envs/staging
   destination:
-    server: https://127.0.0.1:41391
-    namespace: myapp
+    server: 'https://kubernetes.default.svc'
