@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Abdellah91/appforargocd.git
+    targetRevision: HEAD
+    path: envs/staging
+  destination:
+    server: https://127.0.0.1:41391
+    namespace: myapp
