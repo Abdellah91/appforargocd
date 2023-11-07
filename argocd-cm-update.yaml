@@ -11,8 +11,8 @@ data:
     spec:
       version: v1.0
       init:
-        command: [sh, -c, 'echo ""']
+        command: [sh, -c, 'kustomize version']
       generate:
-        command: [sh, -c, 'echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"mycm\", \"namespace\": \"myapp\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"1\", \"KubeApiVersion\": \"2\",\"Bar\": \"baz\"}}}"']
+        command: [sh, -c, 'kustomize build .']
       discover:
-        fileName: "./README.md"
+        fileName: "./kustomization.yaml"

@@ -8,9 +8,9 @@ spec:
   source:
     path: ./test/
     plugin:
-      name: my-plugin-v1.0
+      #name: my-plugin-v1.0
       env:
-        - name: FOO
+        - name: ARGOCD_ENV_FOO
           value: toto
     repoURL: 'https://github.com/Abdellah91/appforargocd.git'
     targetRevision: HEAD
