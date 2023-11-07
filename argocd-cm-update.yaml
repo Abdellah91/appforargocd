@@ -13,6 +13,6 @@ data:
       init:
         command: [sh, -c, 'echo ""']
       generate:
-        command: [sh, -c, 'echo "{\"kind\": \"Namespace\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"myns\"}}"']
+        command: [sh, -c, 'echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"mycm\", \"namespace\": \"myapp\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"1\", \"KubeApiVersion\": \"2\",\"Bar\": \"baz\"}}}"']
       discover:
         fileName: "./README.md"
