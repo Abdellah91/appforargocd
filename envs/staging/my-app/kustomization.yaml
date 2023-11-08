@@ -3,7 +3,5 @@ namespace: staging
 replicas:
   - name: nginx-deployment
     count: 1
-images:
-  - name: nginx:1.25.3-bookworm-perl
 resources:
   - ../../../base
