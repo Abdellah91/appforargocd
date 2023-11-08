@@ -13,6 +13,6 @@ data:
       init:
         command: [sh, -c, 'kustomize version']
       generate:
-        command: [sh, -c, 'kustomize edit set image nginx=alpine && kustomize build .']
+        command: [sh, -c, 'kustomize build .']
       discover:
         fileName: "./kustomization.yaml"

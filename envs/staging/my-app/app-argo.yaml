@@ -1,0 +1,11 @@
+project: default
+source:
+  repoURL: 'https://github.com/Abdellah91/appforargocd.git'
+  path: ./envs/staging/my-app
+  targetRevision: HEAD
+  plugin:
+    env:
+      - name: ARGOCD_ENV_FOO
+        value: toto
+destination:
+  server: 'https://kubernetes.default.svc'

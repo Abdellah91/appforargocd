@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    path: ./test/
+    path: ./envs/staging/my-app
     plugin:
       #name: my-plugin-v1.0
       env:
