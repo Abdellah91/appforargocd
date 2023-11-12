@@ -11,8 +11,8 @@ data:
     spec:
       version: v1.0
       init:
-        command: [sh, -c, 'kustomize version']
+        command: [sh, -c, "kustomize version"]
       generate:
-        command: [sh, -c, 'kustomize build .']
+        command: [sh, -c, "kustomize build . | genvsub -u -p 'ARGOCD_ENV_.*'"]
       discover:
         fileName: "./kustomization.yaml"

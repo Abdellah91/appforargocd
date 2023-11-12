@@ -10,8 +10,8 @@ spec:
     plugin:
       #name: my-plugin-v1.0
       env:
-        - name: ARGOCD_ENV_FOO
-          value: toto
+        - name: ARGOCD_ENV_NAMESPACE
+          value: staging
     repoURL: 'https://github.com/Abdellah91/appforargocd.git'
     targetRevision: HEAD
   destination:

@@ -1,7 +1,10 @@
 ---
-namespace: staging
+namespace: ${ARGOCD_ENV_NAMESPACE}
 replicas:
   - name: nginx-deployment
     count: 1
 resources:
   - ../../../base
+images:
+  - name: nginx
+    newName: ${ARGOCD_ENV_NGINX_IMAGE}
