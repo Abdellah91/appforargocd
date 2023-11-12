@@ -2,7 +2,7 @@
 namespace: ${ARGOCD_ENV_NAMESPACE}
 replicas:
   - name: nginx-deployment
-    count: 1
+    count: 2
 resources:
   - ../../../base
 images:
